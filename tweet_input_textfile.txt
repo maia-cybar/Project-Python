@@ -1,0 +1,40 @@
+from twython import Twython
+import io
+
+file = 'C:/Users/maiaa/ids_tweets.txt'
+
+def GetTweetId(file):
+    tweetIdLists = []
+    with open(file) as f:
+         for line in f:
+          tweetIdLists.append(line)
+    return tweetIdLists
+
+tweetIdLists= GetTweetId(file)
+newlist=[]
+for l in tweetIdLists:
+    newlist.append(l.rstrip())
+print(newlist)
+newlist.remove('id')
+#print(newlist)
+    
+
+
+def getTweetResult(newlist):
+    tweetContent = ""
+    CONSUMER_KEY = ""
+    CONSUMER_SECRET =""
+    OAUTH_TOKEN = ""
+    OAUTH_TOKEN_SECRET = ""
+    twitter = Twython(
+        CONSUMER_KEY, CONSUMER_SECRET,
+        OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
+    for tl in newlist:
+        tweet = twitter.show_status(id=tl)
+        tweetContent = tweet['text']
+        with io.open('outfile.txt', "w", encoding="utf-8") as outfile:
+              outfile.write(tl)
+              outfile.write('\n')
+              outfile.write(tweetContent)
+              outfile.write('\n')  
+              
